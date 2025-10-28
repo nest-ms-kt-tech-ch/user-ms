@@ -1,13 +1,16 @@
 import { Controller, ParseIntPipe } from '@nestjs/common';
 import { UsersService } from './users.service';
-import { CreateUserDto } from './dto/create-user.dto';
-import { UpdateUserDto } from './dto/update-user.dto';
 import { PaginationDto } from 'src/common';
 import { MessagePattern, Payload } from '@nestjs/microservices';
+import { CreateUserDto, FollowDto, GetProfileDto, UnfollowDto, UpdateUserDto } from './dto';
+import { FollowService } from 'src/follow/follow.service';
 
 @Controller('users')
 export class UsersController {
-  constructor(private readonly usersService: UsersService) {}
+  constructor(
+    private readonly usersService: UsersService,
+    private readonly followService: FollowService,
+  ) {}
 
   @MessagePattern({
     cmd: 'create_user',
@@ -44,5 +47,26 @@ export class UsersController {
   })
   remove(@Payload('id', ParseIntPipe) id: number) {
     return this.usersService.remove(+id);
+  }
+
+  @MessagePattern({
+    cmd: 'get-user-profile'
+  })
+  profile(@Payload() getProfileDto: GetProfileDto) {
+    return this.usersService.getProfile(getProfileDto)
+  }
+
+  @MessagePattern({
+    cmd: 'follow-user'
+  })
+  follow(@Payload() followDto: FollowDto) {
+    return this.followService.followUser(followDto);
+  }
+
+  @MessagePattern({
+    cmd: 'unfollow-user'
+  })
+  unfollow(@Payload() unfollowDto: UnfollowDto) {
+    return this.followService.deleteFollowUser(unfollowDto)
   }
 }

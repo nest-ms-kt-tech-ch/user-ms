@@ -4,6 +4,7 @@ import { UpdateUserDto } from './dto/update-user.dto';
 import { PrismaClient } from '@prisma/client';
 import { PaginationDto } from 'src/common';
 import { RpcException } from '@nestjs/microservices';
+import { FollowDto, GetProfileDto, UnfollowDto } from './dto';
 
 @Injectable()
 export class UsersService extends PrismaClient implements OnModuleInit{
@@ -68,6 +69,15 @@ export class UsersService extends PrismaClient implements OnModuleInit{
       data: { active: false },
     });
 
+    return user;
+  }
+
+  async getProfile(getProfileDto: GetProfileDto) {
+    const user = await this.user.findUnique({ where: { id: getProfileDto.id, active: true }, include: { favorites: true, comments: true, Follow: true} });
+    if (!user) throw new RpcException({
+      message: `User with id ${getProfileDto.id} not found`,
+      status: HttpStatus.BAD_REQUEST,
+    });
     return user;
   }
 }

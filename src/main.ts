@@ -6,8 +6,8 @@ import { MicroserviceOptions, Transport } from '@nestjs/microservices';
 
 async function bootstrap() {
   const logger = new Logger('Main');
-  const app = await NestFactory.createMicroservice<MicroserviceOptions>(
-    AppModule,
+  const app = await NestFactory.create(AppModule);
+  const serviceOne = app.connectMicroservice<MicroserviceOptions>(
     {
       transport: Transport.TCP,
       options: {
@@ -16,6 +16,18 @@ async function bootstrap() {
     }
   );
 
+  const serviceTwo = app.connectMicroservice<MicroserviceOptions>(
+    {
+      transport: Transport.TCP,
+      options: {
+        port: envs.PORT +1,
+      }
+    }
+  );
+
+  await app.startAllMicroservices();
+
+
   app.useGlobalPipes(
     new ValidationPipe({
     whitelist: true,
@@ -23,7 +35,7 @@ async function bootstrap() {
     })
   );
 
-  await app.listen();
+  await app.listen(3003);
   
   logger.log(`Users microservices on port: ${envs.PORT}`);
 }
