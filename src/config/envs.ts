@@ -1,5 +1,5 @@
-import "dotenv/config";
-import * as joi from "joi";
+import 'dotenv/config';
+import * as joi from 'joi';
 
 interface EnvVars {
   PORT: number;
@@ -8,13 +8,14 @@ interface EnvVars {
   JWT_EXPIRES_IN: number;
 }
 
-const envSchema = joi.object({
-  PORT: joi.number().default(3001),
-  DATABASE_URL: joi.string().required(),
-  JWT_SECRET: joi.string().default('defaultsecret'),
-  JWT_EXPIRES_IN: joi.number().default(3600),
-})
-.unknown(true);
+const envSchema = joi
+  .object({
+    PORT: joi.number().default(3001),
+    DATABASE_URL: joi.string().required(),
+    JWT_SECRET: joi.string().default('defaultsecret'),
+    JWT_EXPIRES_IN: joi.number().default(3600),
+  })
+  .unknown(true);
 
 const { error, value } = envSchema.validate(process.env);
 

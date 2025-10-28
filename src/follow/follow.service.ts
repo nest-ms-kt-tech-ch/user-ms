@@ -5,12 +5,11 @@ import { UsersService } from 'src/users/users.service';
 
 @Injectable()
 export class FollowService extends PrismaClient implements OnModuleInit {
-
-  private readonly logger = new Logger('FollowService')
+  private readonly logger = new Logger('FollowService');
 
   onModuleInit() {
-    this.$connect()
-    this.logger.log('Database connected')
+    this.$connect();
+    this.logger.log('Database connected');
   }
 
   constructor(private readonly usersService: UsersService) {
@@ -18,20 +17,20 @@ export class FollowService extends PrismaClient implements OnModuleInit {
   }
 
   async followUser(followDto: FollowDto) {
-    await this.usersService.findOne(followDto.id)
-    await this.usersService.findOne(followDto.followTo)
+    await this.usersService.findOne(followDto.id);
+    await this.usersService.findOne(followDto.followTo);
 
     return this.follow.create({
       data: {
         followerId: followDto.id,
         userId: followDto.followTo,
-      }
-    })
+      },
+    });
   }
 
   async deleteFollowUser(unfollowDto: UnfollowDto) {
-    await this.usersService.findOne(unfollowDto.id)
-    await this.usersService.findOne(unfollowDto.unfollowTo)
+    await this.usersService.findOne(unfollowDto.id);
+    await this.usersService.findOne(unfollowDto.unfollowTo);
 
     return this.follow.delete({
       where: {
@@ -39,7 +38,7 @@ export class FollowService extends PrismaClient implements OnModuleInit {
           followerId: unfollowDto.id,
           userId: unfollowDto.unfollowTo,
         },
-      }
-    })
+      },
+    });
   }
 }

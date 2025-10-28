@@ -2,7 +2,16 @@ import { Controller, ParseIntPipe } from '@nestjs/common';
 import { UsersService } from './users.service';
 import { PaginationDto } from 'src/common';
 import { MessagePattern, Payload } from '@nestjs/microservices';
-import { CommentMovieDto, CreateUserDto, FollowDto, GetProfileDto, MarkAsFavoriteDto, UnfollowDto, UnmarkAsFavoriteDto, UpdateUserDto } from './dto';
+import {
+  CommentMovieDto,
+  CreateUserDto,
+  FollowDto,
+  GetProfileDto,
+  MarkAsFavoriteDto,
+  UnfollowDto,
+  UnmarkAsFavoriteDto,
+  UpdateUserDto,
+} from './dto';
 import { FollowService } from 'src/follow/follow.service';
 import { MoviesService } from './movies.service';
 
@@ -38,9 +47,7 @@ export class UsersController {
   @MessagePattern({
     cmd: 'update_user',
   })
-  update(
-    @Payload() updateUserDto: UpdateUserDto
-  ) {
+  update(@Payload() updateUserDto: UpdateUserDto) {
     return this.usersService.update(updateUserDto.id, updateUserDto);
   }
 
@@ -52,44 +59,44 @@ export class UsersController {
   }
 
   @MessagePattern({
-    cmd: 'get-user-profile'
+    cmd: 'get-user-profile',
   })
   profile(@Payload() getProfileDto: GetProfileDto) {
-    return this.usersService.getProfile(getProfileDto)
+    return this.usersService.getProfile(getProfileDto);
   }
 
   @MessagePattern({
-    cmd: 'follow-user'
+    cmd: 'follow-user',
   })
   follow(@Payload() followDto: FollowDto) {
     return this.followService.followUser(followDto);
   }
 
   @MessagePattern({
-    cmd: 'unfollow-user'
+    cmd: 'unfollow-user',
   })
   unfollow(@Payload() unfollowDto: UnfollowDto) {
-    return this.followService.deleteFollowUser(unfollowDto)
+    return this.followService.deleteFollowUser(unfollowDto);
   }
 
   @MessagePattern({
-    cmd: 'mark-movie-as-favorite'
+    cmd: 'mark-movie-as-favorite',
   })
   markAsFavorite(@Payload() markAsFavoriteDto: MarkAsFavoriteDto) {
-    return this.moviesService.markAsFavorite(markAsFavoriteDto)
+    return this.moviesService.markAsFavorite(markAsFavoriteDto);
   }
 
   @MessagePattern({
-    cmd: 'unmark-movie-as-favorite'
+    cmd: 'unmark-movie-as-favorite',
   })
   unmarkAsFavorite(@Payload() unmarkAsFavoriteDto: UnmarkAsFavoriteDto) {
-    return this.moviesService.unmarkAsFavorite(unmarkAsFavoriteDto)
+    return this.moviesService.unmarkAsFavorite(unmarkAsFavoriteDto);
   }
 
   @MessagePattern({
-    cmd: 'comment-movie'
+    cmd: 'comment-movie',
   })
   commentMovie(@Payload() commentMovieDto: CommentMovieDto) {
-    return this.moviesService.commentMovie(commentMovieDto)
+    return this.moviesService.commentMovie(commentMovieDto);
   }
 }

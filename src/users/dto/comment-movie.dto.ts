@@ -1,15 +1,15 @@
-import { Type } from "class-transformer";
-import { IsNumber, IsString, MinLength } from "class-validator";
+import { Type } from 'class-transformer';
+import { IsNumber, IsString, MinLength } from 'class-validator';
 
 export class CommentMovieDto {
   @IsNumber()
   @Type(() => Number)
-  userId: number
+  userId: number;
 
   @IsString()
-  movieId: string
+  movieId: string;
 
   @IsString()
   @MinLength(1)
-  comment: string
+  comment: string;
 }

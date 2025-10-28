@@ -8,25 +8,26 @@ export class MoviesService extends PrismaClient implements OnModuleInit {
   private readonly logger = new Logger('MoviesService');
 
   onModuleInit() {
-    this.$connect()
+    this.$connect();
     this.logger.log('Database connected');
   }
 
   async findFavorite(markAsFavoriteDto: MarkAsFavoriteDto) {
     return this.favorite.findFirst({
-      where: markAsFavoriteDto
+      where: markAsFavoriteDto,
     });
   }
 
   async markAsFavorite(markAsFavoriteDto: MarkAsFavoriteDto) {
-    const isAlreadyFavorite = await this.findFavorite(markAsFavoriteDto)
-    if (isAlreadyFavorite) throw new RpcException({
-      message: "Movie already marked as favorite",
-      status: HttpStatus.NOT_MODIFIED
-    })
+    const isAlreadyFavorite = await this.findFavorite(markAsFavoriteDto);
+    if (isAlreadyFavorite)
+      throw new RpcException({
+        message: 'Movie already marked as favorite',
+        status: HttpStatus.NOT_MODIFIED,
+      });
     return await this.favorite.create({
-      data: markAsFavoriteDto
-    })
+      data: markAsFavoriteDto,
+    });
   }
 
   async unmarkAsFavorite(unmarkAsFavoriteDto: UnmarkAsFavoriteDto) {
@@ -36,13 +37,13 @@ export class MoviesService extends PrismaClient implements OnModuleInit {
           userId: unmarkAsFavoriteDto.userId,
           movieId: unmarkAsFavoriteDto.movieId,
         },
-      }
-    })
+      },
+    });
   }
 
   async commentMovie(commentMovieDto: CommentMovieDto) {
     return await this.comment.create({
-      data: commentMovieDto
-    })
+      data: commentMovieDto,
+    });
   }
 }

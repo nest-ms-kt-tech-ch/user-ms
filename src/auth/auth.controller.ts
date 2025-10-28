@@ -9,7 +9,7 @@ export class AuthController {
   constructor(private readonly authService: AuthService) {}
 
   @MessagePattern({ cmd: 'create-jwt' })
-  async createJwt(data: { userId: string }): Promise<{ token: string; }> {
+  async createJwt(data: { userId: string }): Promise<{ token: string }> {
     const token = await this.authService.signToken({ userId: data.userId });
     return { token };
   }

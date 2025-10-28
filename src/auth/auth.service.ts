@@ -16,15 +16,20 @@ export class AuthService {
   async signToken(payload: { userId: string }): Promise<string> {
     const user = await this.usersService.findOne(Number(payload.userId));
     if (!user) {
-      this.logger.warn(`Attempt to sign JWT for non-existing userId: ${payload.userId}`);
+      this.logger.warn(
+        `Attempt to sign JWT for non-existing userId: ${payload.userId}`,
+      );
       throw new RpcException({
         message: `User with id ${payload.userId} not found`,
         status: 404,
       });
     }
     this.logger.log(`JWT Secret: ${envs.JWT_SECRET}`);
-    return await this.jwtService.signAsync({ userId: Number(payload.userId) }, {
-      expiresIn: envs.JWT_EXPIRES_IN,
-    });
+    return await this.jwtService.signAsync(
+      { userId: Number(payload.userId) },
+      {
+        expiresIn: envs.JWT_EXPIRES_IN,
+      },
+    );
   }
 }

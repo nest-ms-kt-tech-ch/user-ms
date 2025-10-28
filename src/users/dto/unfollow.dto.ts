@@ -1,12 +1,12 @@
-import { Type } from "class-transformer";
-import { IsNumber } from "class-validator";
+import { Type } from 'class-transformer';
+import { IsNumber } from 'class-validator';
 
 export class UnfollowDto {
   @IsNumber()
   @Type(() => Number)
-  id: number
+  id: number;
 
   @IsNumber()
   @Type(() => Number)
-  unfollowTo: number
+  unfollowTo: number;
 }

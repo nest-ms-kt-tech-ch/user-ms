@@ -6,23 +6,26 @@ import { MicroserviceOptions, Transport } from '@nestjs/microservices';
 
 async function bootstrap() {
   const logger = new Logger('Main');
-  const app = await NestFactory.createMicroservice<MicroserviceOptions>(AppModule, {
-    transport: Transport.TCP,
-    options: {
-      host: "0.0.0.0",
-      port: envs.PORT,
+  const app = await NestFactory.createMicroservice<MicroserviceOptions>(
+    AppModule,
+    {
+      transport: Transport.TCP,
+      options: {
+        host: '0.0.0.0',
+        port: envs.PORT,
+      },
     },
-  });
+  );
 
   app.useGlobalPipes(
     new ValidationPipe({
-    whitelist: true,
-    forbidNonWhitelisted: true,
-    })
+      whitelist: true,
+      forbidNonWhitelisted: true,
+    }),
   );
 
   await app.listen();
-  
+
   logger.log(`Users microservices on port: ${envs.PORT}`);
 }
 bootstrap();
