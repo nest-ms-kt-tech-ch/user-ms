@@ -2,14 +2,16 @@ import { Controller, ParseIntPipe } from '@nestjs/common';
 import { UsersService } from './users.service';
 import { PaginationDto } from 'src/common';
 import { MessagePattern, Payload } from '@nestjs/microservices';
-import { CreateUserDto, FollowDto, GetProfileDto, UnfollowDto, UpdateUserDto } from './dto';
+import { CommentMovieDto, CreateUserDto, FollowDto, GetProfileDto, MarkAsFavoriteDto, UnfollowDto, UnmarkAsFavoriteDto, UpdateUserDto } from './dto';
 import { FollowService } from 'src/follow/follow.service';
+import { MoviesService } from './movies.service';
 
 @Controller('users')
 export class UsersController {
   constructor(
     private readonly usersService: UsersService,
     private readonly followService: FollowService,
+    private readonly moviesService: MoviesService,
   ) {}
 
   @MessagePattern({
@@ -68,5 +70,26 @@ export class UsersController {
   })
   unfollow(@Payload() unfollowDto: UnfollowDto) {
     return this.followService.deleteFollowUser(unfollowDto)
+  }
+
+  @MessagePattern({
+    cmd: 'mark-movie-as-favorite'
+  })
+  markAsFavorite(@Payload() markAsFavoriteDto: MarkAsFavoriteDto) {
+    return this.moviesService.markAsFavorite(markAsFavoriteDto)
+  }
+
+  @MessagePattern({
+    cmd: 'unmark-movie-as-favorite'
+  })
+  unmarkAsFavorite(@Payload() unmarkAsFavoriteDto: UnmarkAsFavoriteDto) {
+    return this.moviesService.unmarkAsFavorite(unmarkAsFavoriteDto)
+  }
+
+  @MessagePattern({
+    cmd: 'comment-movie'
+  })
+  commentMovie(@Payload() commentMovieDto: CommentMovieDto) {
+    return this.moviesService.commentMovie(commentMovieDto)
   }
 }
