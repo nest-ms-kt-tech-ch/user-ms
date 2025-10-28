@@ -25,6 +25,20 @@ describe('MoviesService', () => {
     jest.clearAllMocks();
   });
 
+  describe('onModuleInit', () => {
+    it('should connect to the database and log a message', () => {
+      const connectSpy = jest
+        .spyOn(service, '$connect')
+        .mockResolvedValue(undefined);
+      const loggerSpy = jest.spyOn(service['logger'], 'log');
+
+      service.onModuleInit();
+
+      expect(connectSpy).toHaveBeenCalledTimes(1);
+      expect(loggerSpy).toHaveBeenCalledWith('Database connected');
+    });
+  });
+
   it('findFavorite should call prisma.favorite.findFirst', async () => {
     favoriteMock.findFirst.mockResolvedValue(null);
     await service.findFavorite({ userId: 1, movieId: 2 } as any);
