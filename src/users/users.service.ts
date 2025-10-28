@@ -1,8 +1,9 @@
-import { Injectable, Logger, NotFoundException, OnModuleInit } from '@nestjs/common';
+import { HttpStatus, Injectable, Logger, OnModuleInit } from '@nestjs/common';
 import { CreateUserDto } from './dto/create-user.dto';
 import { UpdateUserDto } from './dto/update-user.dto';
 import { PrismaClient } from '@prisma/client';
 import { PaginationDto } from 'src/common';
+import { RpcException } from '@nestjs/microservices';
 
 @Injectable()
 export class UsersService extends PrismaClient implements OnModuleInit{
@@ -42,7 +43,10 @@ export class UsersService extends PrismaClient implements OnModuleInit{
 
   async findOne(id: number) {
     const user = await this.user.findUnique({ where: { id, active: true } });
-    if (!user) throw new NotFoundException(`User with id ${id} not found`);
+    if (!user) throw new RpcException({
+      message: `User with id ${id} not found`,
+      status: HttpStatus.BAD_REQUEST,
+    });
     return user;
   }
 
